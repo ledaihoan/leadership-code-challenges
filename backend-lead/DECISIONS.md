@@ -94,11 +94,21 @@ deposits, accrued grows on wagers, no reset on withdrawal. The spec is silent
 on reset; lifetime counters are the simplest rule that never forgives an unmet
 requirement. Stated as an assumption.
 
+## Assumptions
+
+**Single currency.** No payload or table in the spec carries a currency field,
+so wallets, deposits and callbacks share one implicit currency. Going
+multi-currency later means a currency column on wallets and funding
+transactions, one wallet per member per currency, and FX recorded as its own
+pair of ledger entries with the rate. Out of scope here.
+
+**Turnover never resets** (see A4). Both are stated inline where they bite.
+
 ## AI tool disclosure
 
-Used Claude Code as a pair programmer for this task: read the existing schema/
-conventions, implemented the state machine, service, route, and the two
-priority idempotency tests (sequential + concurrent duplicate callback), then
-added the mismatch/failed/orphan/turnover tests and this write-up. I reviewed
-and understand every line; the locking strategy and mismatch policy above are
-my calls, not defaults it picked.
+Used Claude Code as a pair programmer across the submission: it read the
+schema and conventions, drafted the services, routes and tests to patterns I
+set and corrected in review (locking, error handling style, comment style),
+and helped edit this file and DESIGN-PSP.md. I reviewed and understand every
+line; the locking strategy, state machine boundaries, mismatch policy and
+turnover assumption are my calls, not defaults it picked.
