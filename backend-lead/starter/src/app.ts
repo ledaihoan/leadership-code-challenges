@@ -2,6 +2,7 @@ import express, { ErrorRequestHandler } from 'express';
 import { ZodError } from 'zod';
 import { healthRouter } from './routes/health';
 import { membersRouter } from './routes/members';
+import { depositsRouter } from './routes/deposits';
 
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof ZodError) {
@@ -19,6 +20,7 @@ export function createApp() {
 
   app.use('/health', healthRouter);
   app.use('/members', membersRouter);
+  app.use('/deposits', depositsRouter);
   // Mount your new routes here.
 
   app.use(errorHandler);
