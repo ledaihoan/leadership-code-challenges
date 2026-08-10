@@ -10,6 +10,7 @@
     "db:up": "docker compose up -d postgres",
     "db:migrate": "sequelize-cli db:migrate",
     "db:migrate:test": "cross-env NODE_ENV=test sequelize-cli db:migrate",
+    "db:migration:generate": "sequelize-cli migration:generate --name",
     "test": "npm run db:migrate:test && cross-env NODE_ENV=test jest --runInBand"
   },
   "dependencies": {
