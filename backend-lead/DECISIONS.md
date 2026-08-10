@@ -81,6 +81,19 @@ Money strings are written back with `toFixed(18)` here so API responses match
 what a fresh read returns; the callback handler predates this and still uses
 `toString()`, worth aligning next time that file is touched.
 
+## A4 - Withdrawals
+
+Gate order is fixed: turnover first, then balance. The 422 for unmet turnover
+returns required, accrued and outstanding so the client can show progress. A
+valid withdrawal debits immediately, writes the ledger row and creates a
+`withdrawal` funding transaction in `Pending` for the human approval step the
+spec puts out of scope. Same wallet-row lock as every other money movement.
+
+Turnover counters are lifetime and monotonic: required grows on completed
+deposits, accrued grows on wagers, no reset on withdrawal. The spec is silent
+on reset; lifetime counters are the simplest rule that never forgives an unmet
+requirement. Stated as an assumption.
+
 ## AI tool disclosure
 
 Used Claude Code as a pair programmer for this task: read the existing schema/
