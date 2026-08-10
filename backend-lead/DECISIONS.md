@@ -65,6 +65,22 @@ diving.
 - Alerting on `invalid_transition` / `orphan` volumes, since either climbing
   suggests a PSP integration bug rather than normal retry noise.
 
+## A3 - Wagers
+
+Same recipe as the callback's credit path: lock the wallet row, check, write
+the ledger row, then mutate the cached balance, all in one transaction. Two
+concurrent wagers serialize on that lock, so the loser re-checks against the
+committed balance and gets a clean 422 instead of overdrawing.
+
+No separate wagers table: the `wager_debit` ledger row already carries
+everything the spec asks of a wager. Turnover accrued is exactly the wager
+amount, added under the same lock. Insufficient balance is a domain error
+thrown before any write, mapped to 422 in the route, same pattern as the rest.
+
+Money strings are written back with `toFixed(18)` here so API responses match
+what a fresh read returns; the callback handler predates this and still uses
+`toString()`, worth aligning next time that file is touched.
+
 ## AI tool disclosure
 
 Used Claude Code as a pair programmer for this task: read the existing schema/
